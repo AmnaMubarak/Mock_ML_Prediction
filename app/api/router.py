@@ -10,7 +10,7 @@ from api.endpoints import (
 api_router = APIRouter()
 
 @api_router.get("/", response_class=JSONResponse)
-async def ping():
+async def ping() -> dict:
     """
     This function is used for health check of the application.
     """

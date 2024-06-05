@@ -7,7 +7,7 @@ from services.model import mock_model_predict
 q = queue.Queue()
 
 # Function to process tasks from the queue
-def process_queue():
+def process_queue() -> None:
     while True:
         task = q.get()
         if task is None:

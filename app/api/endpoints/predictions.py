@@ -14,21 +14,22 @@ router = APIRouter()
 #     return output
 
 @router.post("/predict")
-async def predict(item: Item, background_tasks: BackgroundTasks, async_mode: Optional[bool] = True):
+async def predict(item: Item, async_mode: Optional[bool] = True) -> dict:
     if async_mode:
         prediction_id = generate_prediction_id()
         q.put((item.input, prediction_id))
         return JSONResponse(status_code=202, content={"message": "Request received. Processing asynchronously.", "prediction_id": prediction_id})
 
     else:
-        output = mock_model_predict(item.input)
-        return output
+        prediction_id = generate_prediction_id()
+        output = mock_model_predict(item.input, prediction_id)
+        return {"input": item.input, "prediction_id": output}
       
       
 from fastapi.responses import JSONResponse
 
 @router.get("/predict/{prediction_id}")
-async def get_prediction(prediction_id: str):
+async def get_prediction(prediction_id: str) -> JSONResponse:
     if prediction_id not in results:
         return JSONResponse(status_code=404, content={"error": "Prediction ID not found."})
     elif results[prediction_id] is None:
