@@ -9,9 +9,6 @@ COPY ./requirements.txt /app/
 # install requirements with no cache
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
-# copy the rest of the application to the app directory
-COPY . .
-
 # Expose the application on port 8080
 EXPOSE 8080
 
