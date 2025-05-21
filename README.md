@@ -2,7 +2,13 @@
 
 ## Description
 
-This is a Python project that uses FastAPI and Uvicorn for creating a web application. The project is organized as follows:
+This is a Python project that uses FastAPI and Uvicorn for creating a web application.
+
+
+
+
+
+The project is organized as follows:
 
 - `app/`: Contains the main application code.
   - `api/`: Contains the API endpoints.
@@ -12,6 +18,27 @@ This is a Python project that uses FastAPI and Uvicorn for creating a web applic
 - `env/`: Contains the Python virtual environment.
 - `dockerfile`: Contains instructions for building a Docker image of the application.
 - `docker-compose.yml`: Used for defining and running Docker applications.
+
+## Business Logic
+
+The application provides a machine learning prediction service with the following capabilities:
+
+- **Prediction Endpoints**: The API offers both synchronous and asynchronous prediction modes
+  - `POST /predictions/predict`: Submit input for prediction
+  - `GET /predictions/predict/{prediction_id}`: Retrieve results for asynchronous predictions
+  
+- **Processing Queue**: Asynchronous predictions are managed through a background queue system
+  - Predictions are processed in the background while immediately returning a prediction ID
+  - Clients can check the status of predictions using the prediction ID
+  
+- **Mock Model**: The service currently uses a mock model that:
+  - Simulates processing time (8-15 seconds)
+  - Returns randomized prediction results
+  - Demonstrates the asynchronous processing architecture
+
+- **Health Check**: A root endpoint (`/`) provides basic application health status
+
+This architecture allows for high throughput by processing prediction requests asynchronously, which is particularly valuable for ML models with longer inference times.
 
 ## Getting Started
 
