@@ -2,13 +2,7 @@
 
 ## Description
 
-This is a Python project that uses FastAPI and Uvicorn for creating a web application.
-
-
-
-
-
-The project is organized as follows:
+This is a Python project that uses FastAPI and Uvicorn for creating a web application.The project is organized as follows:
 
 - `app/`: Contains the main application code.
   - `api/`: Contains the API endpoints.
@@ -18,6 +12,60 @@ The project is organized as follows:
 - `env/`: Contains the Python virtual environment.
 - `dockerfile`: Contains instructions for building a Docker image of the application.
 - `docker-compose.yml`: Used for defining and running Docker applications.
+
+## Workflow Diagram
+
+```
++-------------------+        +-------------------+
+|                   |        |                   |
+|      Client       +------->+    API Gateway    |
+|                   |        |                   |
++--------+----------+        +---------+---------+
+         |                             |
+         |                             v
+         |                   +---------+---------+
+         |                   |   Sync or Async?  |
+         |                   +---------+---------+
+         |                             |
+         |             +---------------+----------------+
+         |             |                                |
+         |             v                                v
++--------+--------+    |    +------------+    +--------+--------+
+|                 |    |    |            |    |                 |
+| Request Results |    |    | Sync Mode  |    |   Queue Task    |
+|    with ID      |    |    |            |    |                 |
+|                 |    |    +------+-----+    +--------+--------+
++--------+--------+    |           |                   |
+         |             |           |                   v
+         |             |           |           +-------+-------+
+         |             |           |           |  Generate ID  |
+         |             |           |           +-------+-------+
+         v             |           |                   |
++--------+--------+    |           |                   v
+|                 |    |           |           +-------+-------+
+| Check Results   |    |           |           | Return ID to  |
+|                 |    |           |           |    Client     |
++--------+--------+    |           |           +-------+-------+
+         |             |           |                   |
+         v             |           v                   v
++--------+--------+    |    +------+-----+    +-------+-------+
+|                 |    |    |            |    |  Background   |
+| Return Results  |<---+----+ Return     |    |    Worker     |
+|                 |         | Results    |    |               |
++-----------------+         |            |    +-------+-------+
+                            +------------+            |
+                                                      v
+                                              +-------+-------+
+                                              |  Process      |
+                                              |  Prediction   |
+                                              +-------+-------+
+                                                      |
+                                                      v
+                                              +-------+-------+
+                                              |  Store        |
+                                              |  Results      |
+                                              +---------------+
+```
 
 ## Business Logic
 
@@ -39,6 +87,19 @@ The application provides a machine learning prediction service with the followin
 - **Health Check**: A root endpoint (`/`) provides basic application health status
 
 This architecture allows for high throughput by processing prediction requests asynchronously, which is particularly valuable for ML models with longer inference times.
+
+## Suggested Project Names
+
+Here are some more descriptive names for this project:
+
+1. **PredictFlow** - Emphasizes the streamlined workflow for predictions
+2. **AsyncML** - Highlights the asynchronous ML prediction capability
+3. **PredictQueue** - Focuses on the queuing system for prediction requests
+4. **InferenceAPI** - Describes the core ML inference functionality
+5. **MLServeAsync** - Combines ML serving with asynchronous processing
+6. **PredictorX** - Modern name for a flexible prediction service
+7. **FlexPredict** - Emphasizes flexibility in handling prediction requests
+8. **InferenceHub** - Positions the service as a central hub for ML inferences
 
 ## Getting Started
 
