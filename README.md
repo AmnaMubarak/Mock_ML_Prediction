@@ -40,13 +40,14 @@ This is a Python project that uses FastAPI and Uvicorn for creating a web applic
          |             |           |           +-------+-------+
          |             |           |           |  Generate ID  |
          |             |           |           +-------+-------+
-         v             |           |                   |
-+--------+--------+    |           |                   v
-|                 |    |           |           +-------+-------+
-| Check Results   |    |           |           | Return ID to  |
-|                 |    |           |           |    Client     |
-+--------+--------+    |           |           +-------+-------+
          |             |           |                   |
+         v             |           |                   v
++--------+--------+    |           |           +-------+-------+
+|                 |    |           |           | Return ID to  |
+| Check Results   |    |           |           |    Client     |
+|                 |    |           |           +-------+-------+
++--------+--------+    |           |                   |
+         |             |           |                   v
          v             |           v                   v
 +--------+--------+    |    +------+-----+    +-------+-------+
 |                 |    |    |            |    |  Background   |
