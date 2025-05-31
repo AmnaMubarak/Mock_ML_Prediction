@@ -1,123 +1,153 @@
-# MOCK ML PREDICTIONS
+# PredictFlow Hub 🚀
 
-## Description
+![FastAPI](https://img.shields.io/badge/FastAPI-0.68.0+-009688.svg)
+![Python](https://img.shields.io/badge/Python-3.10.1-3776AB.svg)
+![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED.svg)
 
-This is a Python project that uses FastAPI and Uvicorn for creating a web application.The project is organized as follows:
+A robust, scalable ML prediction service featuring both synchronous and asynchronous processing capabilities. Built with FastAPI and modern architectural patterns.
 
-- `app/`: Contains the main application code.
-  - `api/`: Contains the API endpoints.
-  - `services/`: Contains services like model prediction and queue management.
-  - `schema/`: Contains Pydantic models for request and response handling.
-- `.vscode/`: Contains settings for the Visual Studio Code editor.
-- `env/`: Contains the Python virtual environment.
-- `dockerfile`: Contains instructions for building a Docker image of the application.
-- `docker-compose.yml`: Used for defining and running Docker applications.
+## 🌟 Key Features
 
-## Workflow Diagram
+- **Dual Processing Modes**
+  - Synchronous predictions for immediate results
+  - Asynchronous processing for long-running predictions
+- **Queue Management System**
+  - Background task processing
+  - Job status tracking
+  - Result persistence
+- **RESTful API Endpoints**
+  - Health checks
+  - Prediction submission
+  - Result retrieval
+- **Docker Support**
+  - Containerized deployment
+  - Easy scaling
+  - Consistent environments
 
-```
-+-------------------+        +-------------------+
-|                   |        |                   |
-|      Client       +------->+    API Gateway    |
-|                   |        |                   |
-+--------+----------+        +---------+---------+
-         |                             |
-         |                             v
-         |                   +---------+---------+
-         |                   |   Sync or Async?  |
-         |                   +---------+---------+
-         |                             |
-         |             +---------------+----------------+
-         |             |                                |
-         |             v                                v
-+--------+--------+    |    +------------+    +--------+--------+
-|                 |    |    |            |    |                 |
-| Request Results |    |    | Sync Mode  |    |   Queue Task    |
-|    with ID      |    |    |            |    |                 |
-|                 |    |    +------+-----+    +--------+--------+
-+--------+--------+    |           |                   |
-         |             |           |                   v
-         |             |           |           +-------+-------+
-         |             |           |           |  Generate ID  |
-         |             |           |           +-------+-------+
-         |             |           |                   |
-         v             |           |                   v
-+--------+--------+    |           |           +-------+-------+
-|                 |    |           |           | Return ID to  |
-| Check Results   |    |           |           |    Client     |
-|                 |    |           |           +-------+-------+
-+--------+--------+    |           |                   |
-         |             |           |                   v
-         v             |           v                   v
-+--------+--------+    |    +------+-----+    +-------+-------+
-|                 |    |    |            |    |  Background   |
-| Return Results  |<---+----+ Return     |    |    Worker     |
-|                 |         | Results    |    |               |
-+-----------------+         |            |    +-------+-------+
-                            +------------+            |
-                                                      v
-                                              +-------+-------+
-                                              |  Process      |
-                                              |  Prediction   |
-                                              +-------+-------+
-                                                      |
-                                                      v
-                                              +-------+-------+
-                                              |  Store        |
-                                              |  Results      |
-                                              +---------------+
+## 🏗️ Architecture
+
+```mermaid
+graph TD
+    A[Client] --> B[API Gateway]
+    B --> C{Sync/Async?}
+    C -->|Sync| D[Direct Processing]
+    C -->|Async| E[Queue Task]
+    E --> F[Generate ID]
+    F --> G[Background Worker]
+    G --> H[Process Prediction]
+    H --> I[Store Results]
+    D --> J[Return Results]
+    I --> K[Results Available]
 ```
 
-## Business Logic
+## 🛠️ Technical Stack
 
-The application provides a machine learning prediction service with the following capabilities:
+- **Backend Framework**: FastAPI
+- **Server**: Uvicorn
+- **Queue System**: Custom Implementation
+- **Containerization**: Docker & Docker Compose
+- **Development Tools**: VS Code
 
-- **Prediction Endpoints**: The API offers both synchronous and asynchronous prediction modes
-  - `POST /predictions/predict`: Submit input for prediction
-  - `GET /predictions/predict/{prediction_id}`: Retrieve results for asynchronous predictions
-  
-- **Processing Queue**: Asynchronous predictions are managed through a background queue system
-  - Predictions are processed in the background while immediately returning a prediction ID
-  - Clients can check the status of predictions using the prediction ID
-  
-- **Mock Model**: The service currently uses a mock model that:
-  - Simulates processing time (8-15 seconds)
-  - Returns randomized prediction results
-  - Demonstrates the asynchronous processing architecture
+## 📁 Project Structure
 
-- **Health Check**: A root endpoint (`/`) provides basic application health status
+```
+PredictFlow Hub/
+├── app/
+│   ├── api/         # API endpoints
+│   ├── services/    # Business logic & ML services
+│   └── schema/      # Data models & validation
+├── .vscode/         # Editor configuration
+├── dockerfile       # Docker image definition
+├── docker-compose.yml
+└── requirements.txt
+```
 
-This architecture allows for high throughput by processing prediction requests asynchronously, which is particularly valuable for ML models with longer inference times.
-
-## Suggested Project Names
-
-Here are some more descriptive names for this project:
-
-1. **PredictFlow** - Emphasizes the streamlined workflow for predictions
-2. **AsyncML** - Highlights the asynchronous ML prediction capability
-3. **PredictQueue** - Focuses on the queuing system for prediction requests
-4. **InferenceAPI** - Describes the core ML inference functionality
-5. **MLServeAsync** - Combines ML serving with asynchronous processing
-6. **PredictorX** - Modern name for a flexible prediction service
-7. **FlexPredict** - Emphasizes flexibility in handling prediction requests
-8. **InferenceHub** - Positions the service as a central hub for ML inferences
-
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- Python 3.10.1
-- Docker Desktop (if you want to run the application in a container)
+- Python 3.10.1+
+- Docker Desktop
+- Git
 
-### Installation
+### Quick Start
 
-1. Clone the repository.
-2. Create a Python virtual environment and activate it.
-3. Install the required packages using `pip install -r requirements.txt`.
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/AmnaMubarak/PredictFlow-Hub.git
+   cd PredictFlow-Hub
+   ```
 
-### Running the Application
+2. **Local Development Setup**
+   ```bash
+   python -m venv env
+   source env/bin/activate  # On Windows: .\env\Scripts\activate
+   pip install -r requirements.txt
+   ```
 
-You can run the application using docker-compose command.
+3. **Docker Deployment**
+   ```bash
+   docker-compose up --build
+   ```
 
-```sh
-docker-compose up --build
+## 🔌 API Endpoints
+
+### Prediction Endpoints
+
+- **POST** `/predictions/predict`
+  - Submit new prediction request
+  - Returns prediction ID for async mode
+
+- **GET** `/predictions/predict/{prediction_id}`
+  - Retrieve prediction results
+  - Check prediction status
+
+### Health Check
+
+- **GET** `/`
+  - Application health status
+  - Service availability check
+
+## 💡 Usage Examples
+
+```python
+# Synchronous Prediction
+response = requests.post(
+    "http://localhost:8000/predictions/predict",
+    json={"data": input_data, "mode": "sync"}
+)
+
+# Asynchronous Prediction
+async_response = requests.post(
+    "http://localhost:8000/predictions/predict",
+    json={"data": input_data, "mode": "async"}
+)
+prediction_id = async_response.json()["prediction_id"]
+
+# Check Results
+results = requests.get(
+    f"http://localhost:8000/predictions/predict/{prediction_id}"
+)
+```
+
+## 🔧 Configuration
+
+Environment variables can be configured in `.env`:
+```
+MODEL_PROCESSING_TIME=10
+ASYNC_MODE_ENABLED=true
+```
+
+## 👤 Author
+
+**Amna Mubarak**
+- GitHub: [@AmnaMubarak](https://github.com/AmnaMubarak)
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/AmnaMubarak/PredictFlow-Hub/issues).
+
